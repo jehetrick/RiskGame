@@ -1080,6 +1080,7 @@ def examine_object():
 def use_object():
     global room_map, props, item_carrying, air, selected_item, energy
     global in_my_pockets, suit_stitched, air_fixed, game_over
+    global social, physical, financial
 
     use_message = "You fiddle around with it but don't get anywhere."
     standard_responses = {
@@ -1164,10 +1165,8 @@ Rendezvous Sector 13, outside."
         game_completion_sequence()
 
     elif item_player_is_on == 16:
-        energy += 1
-        if energy > 100:
-            energy = 100
-        use_message = "You munch the lettuce and get a little energy back"
+        social, physical, financial = 100, 100, 100
+        use_message = "You munch the lettuce and get your vibes back up"
         draw_vibes()        
 
     elif item_player_is_on == 42:
@@ -1182,9 +1181,9 @@ Rendezvous Sector 13, outside."
         sounds.doors.play()
 
     elif item_carrying == 68 or item_player_is_on == 68:
-        energy = 100
-        use_message = "You use the food to restore your energy"
+        use_message = "You use the food to restore your vibes"
         remove_object(68)
+        social, physical, financial = 100, 100, 100
         draw_vibes()
 
     if suit_stitched and air_fixed: # open airlock access
@@ -1276,7 +1275,7 @@ def game_completion_sequence():
         game_over = True
         sounds.win_lyra.play()
 #        sounds.gameover.play()
-        screen.draw.text("GAME OVER", (120, 200), color = vibe_color[vibe],
+        screen.draw.text("MISSION COMPLETE", (120, 200), color = vibe_color[vibe],
                      fontsize = 128, shadow = (1, 1), scolor = WHITE)
         screen.draw.text(win_msg[vibe][0], (60, 300), color = WHITE,
                      fontsize = 24, shadow = (1, 1), scolor = vibe_color[vibe])
@@ -1429,7 +1428,7 @@ def loose_the_game(vibe, reason1, reason2):
     show_text(reason2, 1, vibe_color[vibe])
     game_over = True
     sounds.say_mission_fail.play()
-    sounds.gameover.play()
+    sounds.lose_lyra.play()
     screen.draw.text("GAME OVER", (120, 200), color = vibe_color[vibe],
                      fontsize = 128, shadow = (1, 1), scolor = WHITE)
     screen.draw.text(lose_msg[vibe][0], (60, 300), color = WHITE,
